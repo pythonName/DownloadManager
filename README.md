@@ -25,3 +25,10 @@ IOS7之后，大家都开始用NSURLSession来处理下载了，AFNetworking SDI
 是因为NSURLSessionDownloadTask在下载过程中压根不告诉你当前临时文件保存的路径，只有当整个下载完成时才告诉你文件放哪儿的！有朋友说：不是有个resumeData吗，调用task的cancelByProducingResumeData方法获取这个resumeData 然后用这个data重启任务呀！
 我想问，你在什么时机调用cancelByProducingResumeData方法呢？ 下载进度回调方法里？应用退到后台的通知回调里？这都是坑啊！
 应用在退到后台后还是稍微执行一点时间，这段时间还是在继续下载数据的，这个resumeData压根就没有比能直接拿到下载的半截文件的大小来的准、来的狠！！
+
+
+参考：https://blog.csdn.net/hongfengkt/article/details/48290561
+https://juejin.im/entry/588477782f301e0069826b2b
+https://www.jianshu.com/p/5a07352e9473
+http://zxfcumtcs.github.io/2016/06/09/NSURLSession_Supplements/
+http://landcareweb.com/questions/24449/shi-yong-hou-tai-pei-zhi-shi-nsurlsessiontaskzai-chao-shi-hou-yong-yuan-bu-hui-hui-diao
