@@ -19,6 +19,7 @@
 //@property (atomic, strong) NSMutableArray *downloadwaitingQueue; //正在等待的
 @property (nonatomic,strong) NSURLSession *sharedSessionForeground;//前台session
 //+ (DownloadManager *)sharedInstance;
+@property (nonatomic,assign) BOOL isEnterBackground;
 
 - (BOOL)addAppDownloadItem:(AppDownloadItemOperation *)item;
 

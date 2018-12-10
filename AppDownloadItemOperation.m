@@ -18,6 +18,7 @@
 //            [aCoder encodeObject:appData forKey:key];
 //            continue;
 //        }
+        if ([key isEqualToString:@"fileHandle"]) continue;
         [aCoder encodeObject:[pros objectForKey:key] forKey:key];
     }
 }
@@ -32,10 +33,12 @@
 //                _chapter = [NSKeyedUnarchiver unarchiveObjectWithData:value];
 //                continue;
 //            }
+            if ([key isEqualToString:@"fileHandle"]) continue;
             id value = [aDecoder decodeObjectForKey:key];
             if (value)
                 [self setValue:value forKey:key];
         }
+        self.fileSavePath = [gAppDownloadSavePath stringByAppendingPathComponent:self.uniqueID];
     }
 
     return self;

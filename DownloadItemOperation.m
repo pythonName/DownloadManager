@@ -63,11 +63,12 @@
     _downloadStartTime = [NSDate timeIntervalSinceReferenceDate];
     
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:self.url]];
-    request.timeoutInterval = 8.0;
+    request.timeoutInterval = 15.0;
     if (isBreakPointDownload) {
         // 设置HTTP请求头中的Range
         NSString *range = [NSString stringWithFormat:@"bytes=%lld-", _fileProgressSize];
         [request setValue:range forHTTPHeaderField:@"Range"];
+        NSLog(@"从 %@ 开始", range);
     }
 //    _task = [[AppDownloadManager sharedInstance].sharedSession downloadTaskWithRequest:request];
     _task = [[AppDownloadManager sharedInstance].sharedSessionForeground dataTaskWithRequest:request];
@@ -94,6 +95,7 @@
 #pragma mark - 继续下载
 - (void)continueOperation {
     _fileProgressSize = [[BaseFunc getFileSize:_fileSavePath] longLongValue];
+    NSLog(@"%@ size: %lld", _fileSavePath, _fileProgressSize);
     [self startOperation:YES];
 
 }

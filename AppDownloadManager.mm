@@ -114,7 +114,11 @@
         });
     } else {
         NSLog(@"Task: %@ completed with error: %@", task, [error localizedDescription]);
-        oper.state = kDownloadItemOperationFaildState;
+        if ((NSURLErrorTimedOut == error.code || NSURLErrorNetworkConnectionLost == error.code) && self.isEnterBackground) {
+            oper.state = kDownloadItemOperationExecutingState;
+        }else {
+            oper.state = kDownloadItemOperationFaildState;
+        }
 //        if ([[error localizedDescription] isEqualToString:@"cancelled"]) {
 //            NSLog(@"调用task的cancelResumeData方法时出现此错误码");
 //            oper.state = kDownloadItemOperationPausedState;
@@ -158,7 +162,7 @@
         //下载对象状态信息变动 立马序列化
         [self archiverThisOper:oper];
         
-        if(![[error localizedDescription] isEqualToString:@"cancelled"]) {
+        if(oper.state == kDownloadItemOperationFaildState) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self handleDownloadFailed:oper error:error];
             });

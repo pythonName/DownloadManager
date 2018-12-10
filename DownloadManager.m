@@ -46,17 +46,28 @@
         [self resumeDownloadQueue];
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidBecomeAA) name:UIApplicationDidBecomeActiveNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidEnterBB) name:UIApplicationDidEnterBackgroundNotification object:nil];
     }
     return self;
 }
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidEnterBackgroundNotification object:nil];
+}
+
+- (void)applicationDidEnterBB {
+    self.isEnterBackground = YES;
 }
 
 - (void)applicationDidBecomeAA {
     NSLog(@"UIApplicationDidBecomeActive-------");
+    
+    [self performSelector:@selector(resume) withObject:nil afterDelay:2.0];
+}
 
+- (void)resume {
+    self.isEnterBackground = NO;
     //之前保存的队列信息中如果有正在执行的oper 则要恢复继续下载
     [self.lock lock];
     for (AppDownloadItemOperation *downloadItem in self.downloadQueue) {
@@ -70,7 +81,7 @@
     }
     [self.lock unlock];
 }
-    
+
 #pragma mark - 创建共享session
 - (void)createShareSession {
 //    NSURLSessionConfiguration *configuration;
